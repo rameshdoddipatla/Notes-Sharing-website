@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notes Sharing - Home</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial;
+            color: black;
+            overflow-x: hidden;
+        }
+
+        /* Background Video */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Header */
+        header {
+            background: rgba(243, 242, 245, 0.6);
+            padding: 20px;
+            text-align: center;
+            font-size: 50px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: fadeIn 1s;
+        }
+
+        /* Navigation bar */
+        nav {
+            background: rgba(227, 226, 235, 0.8);
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        nav a {
+            color: rgb(204, 14, 14);
+            text-decoration: none;
+            font-size: 18px;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            background: rgb(213, 213, 218);
+            color: rgb(60, 19, 207);
+        }
+
+        /* Hero section */
+        .hero {
+            text-align: center;
+            margin-top: 120px;
+            animation: fadeUp 1.2s;
+        }
+
+        .hero h1 {
+            font-size: 45px;
+            text-shadow: 0 0 10px black;
+            text-align: left;
+            color: white;
+            padding: 15px 30px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-top: 10px;
+            text-shadow: 0 0 8px black;
+            text-align: left;
+            color: white;
+            padding: 15px 30px;
+        }
+
+        /* Buttons */
+        .btn-box {
+            margin-top: 30px;
+            text-align: left;
+            padding: 15px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+            cursor: pointer;
+            background: rgba(56, 10, 146, 0.829);
+            color: rgb(236, 236, 229);
+            transition: 0.25s;
+        }
+
+        .btn:hover {
+            background: rgb(93, 10, 228);
+            color: black;
+            transform: scale(1.025);
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(209, 231, 5, 0.6);
+            text-align: center;
+            padding: 10px;
+            font-size: 16px;
+            animation: fadeIn 1s;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @keyframes fadeUp {
+            from {opacity: 0; transform: translateY(30px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Video -->
+    <video id="bg-video" autoplay muted loop playsinline>
+        <source src="main.mp4" type="video/mp4">
+    </video>
+
+    <header>
+        Notes Sharing Website
+    </header>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="all-notes.html">All Notes</a>
+        <a href="register.html">Register</a>
+    </nav>
+
+    <div class="hero">
+        <h1>Welcome to Note Sharing Platform</h1>
+        <p>Upload, View, Download – Fast & Easy!</p>
+
+        <div class="btn-box">
+            <button class="btn" onclick="location.href='all-notes.html'">View Notes</button><br>
+            <button class="btn" onclick="location.href='register.html'"> Register </button>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 Notes Sharing Website | Designed by <b>Ramesh D</b>
+    </footer>
+
+</body>
+</html>

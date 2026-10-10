@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Notes – Notes Sharing</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+
+      background: linear-gradient(135deg, #1e3c72, #2a5298, #ff4b8b);
+      background-size: 400% 400%;
+      animation: gradientMove 8s ease infinite;
+      background: url("mv4.jpeg") no-repeat center fixed;
+            background-size: cover;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .box {
+      width: 380px;
+      padding: 30px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 25px rgba(0,0,0,0.3);
+      color: white;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 15px;
+    }
+
+    input::placeholder {
+      color: #777;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px #007bff;
+    }
+
+    .secondary {
+      background: linear-gradient(135deg, #6c757d, #495057);
+    }
+
+    .secondary:hover {
+      box-shadow: 0 0 12px #6c757d;
+    }
+
+    #msg {
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    /* ✅ FOOTER STYLE */
+    footer {
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+      color: #fff;
+      background: rgba(0,0,0,0.25);
+      letter-spacing: 1px;
+    }
+
+    footer span {
+      color: #00e6ff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main">
+    <div class="box">
+      <h2>Upload Notes</h2>
+
+      <input id="title" placeholder="Note Title">
+      <input id="file" type="file">
+
+      <button onclick="uploadNote()">Upload</button>
+      <button class="secondary" onclick="goAllNotes()">Go to All Notes</button>
+      <button class="secondary" onclick="logout()">Logout</button>
+
+      <p id="msg"></p>
+    </div>
+  </div>
+
+  <!-- ✅ FOOTER -->
+  <footer>
+    Designed by <span>Ramesh D</span> | © 2025 Notes Sharing Project
+  </footer>
+
+  <script>
+    const API = "http://localhost:5000";
+
+    // ✅ Redirect to login if no token
+    if (!localStorage.getItem("token")) {
+      alert("Please login first.");
+      window.location.href = "login.html";
+    }
+
+    function goAllNotes() {
+      window.location.href = "all-notes.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userEmail");
+      window.location.href = "index.html";
+    }
+
+    async function uploadNote() {
+      const title = document.getElementById("title").value.trim();
+      const fileInput = document.getElementById("file");
+      const msg = document.getElementById("msg");
+
+      if (!title) {
+        msg.style.color = "orange";
+        msg.innerText = "Please enter a title.";
+        return;
+      }
+
+      if (!fileInput.files[0]) {
+        msg.style.color = "orange";
+        msg.innerText = "Please select a file.";
+        return;
+      }
+
+      const uploadedBy = localStorage.getItem("userEmail") || "Unknown user";
+
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("uploadedBy", uploadedBy);
+      formData.append("file", fileInput.files[0]);
+
+      try {
+        const res = await fetch(API + "/api/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+        msg.style.color = data.success ? "lightgreen" : "red";
+        msg.innerText = data.message || "Upload failed";
+
+      } catch (err) {
+        console.error(err);
+        msg.style.color = "red";
+        msg.innerText = "Server error";
+      }
+    }
+  </script>
+
+</body>
+</html>

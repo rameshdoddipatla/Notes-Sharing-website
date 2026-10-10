@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Approved Notes</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+
+      background: linear-gradient(135deg, #1e3c72, #2a5298, #ff4b8b);
+      background-size: 400% 400%;
+      animation: gradientMove 8s ease infinite;
+      color: white; 
+      background: url("mv4.jpeg") no-repeat center fixed;
+            background-size: cover;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h2 {
+      font-size: x-large;
+      text-align: left;
+      margin: 30px  20px;
+      letter-spacing: 1px;
+      color: rgb(240, 30, 15);
+    }
+
+    .container {
+      flex: 1;
+      padding: 0 20px 30px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    #search {
+      width: 100%;
+      padding: 12px;
+      border-radius: 25px;
+      border: none;
+      outline: none;
+      margin-bottom: 25px;
+      font-size: 16px;
+    }
+
+    .note {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      padding: 18px;
+      margin-bottom: 15px;
+      border-radius: 15px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+
+    .note:hover {
+      transform: scale(1.02);
+    }
+
+    .note h3 {
+      margin: 0 0 8px;
+    }
+
+    .note p {
+      margin: 5px 0 10px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .actions a button {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: white;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      transition: 0.3s;
+    }
+
+    .actions a button:hover {
+      box-shadow: 0 0 10px #00c6ff;
+      transform: scale(1.05);
+    }
+
+    .download-btn {
+      background: linear-gradient(135deg, #28a745, #1e7e34) !important;
+    }
+
+    .download-btn:hover {
+      box-shadow: 0 0 10px #28a745 !important;
+    }
+
+    /* ✅ FOOTER */
+    footer {
+      text-align: center;
+      padding: 12px;
+      font-size: 14px;
+      background: rgba(0,0,0,0.25);
+    }
+
+    footer span {
+      color: #00e6ff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>All Approved Notes</h2>
+
+  <div class="container">
+    <input id="search" placeholder="Search by title..." onkeyup="filterNotes()">
+
+    <div id="notes"></div>
+  </div>
+
+  <!-- ✅ FOOTER -->
+  <footer>
+    Designed by <span>Ramesh D</span> | © 2025 Notes Sharing Project
+  </footer>
+
+  <script>
+    const API = "http://localhost:5000";
+    let allNotes = [];
+
+    // ✅ Load all approved notes
+    async function loadNotes() {
+      const res = await fetch(API + "/api/notes");
+      allNotes = await res.json();
+      showNotes(allNotes);
+    }
+
+    function showNotes(notes) {
+      const container = document.getElementById("notes");
+      container.innerHTML = "";
+
+      if (notes.length === 0) {
+        container.innerHTML = "<p style='text-align:center;'>No approved notes found.</p>";
+        return;
+      }
+
+      notes.forEach(note => {
+        container.innerHTML += `
+          <div class="note">
+            <h3>${note.title}</h3>
+            <p><b>Uploaded By:</b> ${note.uploadedBy || "Unknown"}</p>
+
+            <div class="actions">
+              <a href="${API}${note.filepath}" target="_blank">
+                <button>View</button>
+              </a>
+
+              <a href="${API}${note.filepath}" download>
+                <button class="download-btn">Download</button>
+              </a>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function filterNotes() {
+      const text = document.getElementById("search").value.toLowerCase();
+      const filtered = allNotes.filter(n =>
+        n.title.toLowerCase().includes(text)
+      );
+      showNotes(filtered);
+    }
+
+    loadNotes();
+  </script>
+
+</body>
+</html>
