@@ -186,6 +186,13 @@ def get_approved_notes():
 @app.route("/")
 def home():
     return "Notes Sharing Website is Running Successfully!"
+
+@app.route("/")
+def home():
+    frontend_folder = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "frontend")
+    )
+    return send_from_directory(frontend_folder, "index.html")
     
 # ✅ START SERVER
 if __name__ == "__main__":
