@@ -182,7 +182,11 @@ def get_approved_notes():
     notes = Note.query.filter_by(status="approved").order_by(Note.date.desc()).all()
     return jsonify([n.to_dict() for n in notes])
 
-
+#HOME PAGE
+@app.route("/")
+def home():
+    return "Notes Sharing Website is Running Successfully!"
+    
 # ✅ START SERVER
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
