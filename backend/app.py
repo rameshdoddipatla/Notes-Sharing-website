@@ -183,14 +183,19 @@ def get_approved_notes():
     return jsonify([n.to_dict() for n in notes])
 
 
-# HOME PAGE
+# FRONTEND FILES
+FRONTEND_FOLDER = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "frontend")
+)
+
 @app.route("/")
 def home():
-    frontend_folder = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "frontend")
-    )
-    return send_from_directory(frontend_folder, "index.html")
-    
+    return send_from_directory(FRONTEND_FOLDER, "index.html")
+
+@app.route("/<path:filename>")
+def frontend_files(filename):
+    return send_from_directory(FRONTEND_FOLDER, filename)
+
 # ✅ START SERVER
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
